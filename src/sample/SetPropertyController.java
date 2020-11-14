@@ -1,8 +1,14 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class SetPropertyController {
 
@@ -43,9 +49,35 @@ public class SetPropertyController {
     public void initialize() {
         if (isInitializeByMyController){
             initializeProperty();
+            onActionPreviousButton();
         }
+    }
 
+    private void loadPreviousPage()throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/sample/sample.fxml"));
+        try {
+            loader.load();
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.show();
+        }catch (IOException e){
+            ErrorPopUp errorPopUp = new ErrorPopUp("ERRORS", e.getMessage());
+            errorPopUp.showAndWait();
+            throw e;
+        }
+    }
 
+    private void onActionPreviousButton(){
+        previousButton.setOnAction(event -> {
+            try{
+                loadPreviousPage();
+                previousButton.getScene().getWindow().hide();
+            }catch (IOException ignored){
+            }
+        });
     }
 
     public void setInitializeByMyController(boolean initializeByMyController) {
