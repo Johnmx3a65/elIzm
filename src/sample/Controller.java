@@ -68,7 +68,7 @@ public class Controller {
                 try {
                     fs.close();
                 } catch (IOException e) {
-                    ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                    ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", "Error close file");
                     errorPopUp.showAndWait();
                 }
             }
@@ -117,6 +117,7 @@ public class Controller {
             loader.load();
             secondPage = loader.getController();
             setPropertyToSecondPage(secondPage);
+            secondPage.setInitializeByMyController(true);
             secondPage.initialize();
         }catch (IOException e){
             ErrorPopUp errorPopUp = new ErrorPopUp("ERRORS", e.getMessage());

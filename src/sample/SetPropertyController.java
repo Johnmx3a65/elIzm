@@ -18,6 +18,8 @@ public class SetPropertyController {
 
     private double inputTankHeightDouble;
 
+    private boolean isInitializeByMyController = false;
+
     @FXML
     private ResourceBundle resources;
 
@@ -25,69 +27,65 @@ public class SetPropertyController {
     private URL location;
 
     @FXML
-    private final TextField pipelineLength;
+    private TextField pipelineLength;
 
     @FXML
     private Button setPropertyButton;
 
     @FXML
-    private final TextField pipeDiameter;
+    private TextField pipeDiameter;
 
     @FXML
-    private final TextField pipeHeight;
+    private TextField pipeHeight;
 
     @FXML
-    private final TextField outputTankHeight;
+    private TextField outputTankHeight;
 
     @FXML
-    private final TextField inputTankHeight;
+    private TextField inputTankHeight;
 
     @FXML
     private Button previousButton;
 
-    public SetPropertyController(){
-        pipelineLength = new TextField();
-        pipeDiameter = new TextField();
-        pipeHeight = new TextField();
-        outputTankHeight = new TextField();
-        inputTankHeight = new TextField();
-    }
-
     @FXML
     public void initialize() {
+        if (isInitializeByMyController)
         initializeProperty();
 
     }
 
+    public void setInitializeByMyController(boolean initializeByMyController) {
+        isInitializeByMyController = initializeByMyController;
+    }
+
     public void setPipelineLengthDouble(double pipelineLengthDouble) {
         this.pipelineLengthDouble = pipelineLengthDouble;
+        pipelineLength.setText(String.valueOf(pipelineLengthDouble));
     }
 
     public void setPipeDiameterDouble(double pipeDiameterDouble) {
         this.pipeDiameterDouble = pipeDiameterDouble;
+        pipeDiameter.setText(String.valueOf(pipeDiameterDouble));
     }
 
     public void setPipeHeightDouble(double pipeHeightDouble) {
         this.pipeHeightDouble = pipeHeightDouble;
+        pipeHeight.setText(String.valueOf(pipeHeightDouble));
     }
 
     public void setOutputTankHeightDouble(double outputTankHeightDouble) {
         this.outputTankHeightDouble = outputTankHeightDouble;
+        outputTankHeight.setText(String.valueOf(outputTankHeightDouble));
     }
 
     public void setInputTankHeightDouble(double inputTankHeightDouble) {
         this.inputTankHeightDouble = inputTankHeightDouble;
+        inputTankHeight.setText(String.valueOf(inputTankHeightDouble));
     }
 
     private void initializeProperty(){
-        pipelineLength.setText(String.valueOf(pipelineLengthDouble));
-        pipeDiameter.setText(String.valueOf(pipeDiameterDouble));
-        pipeHeight.setText(String.valueOf(pipeHeightDouble));
-        outputTankHeight.setText(String.valueOf(outputTankHeightDouble));
-        inputTankHeight.setText(String.valueOf(inputTankHeightDouble));
         System.out.println("Расход воды м^3/ч: " + calculateWaterConsumptionInMPerHour());
         System.out.println("Расход воды л/с: " + calculateWaterConsumptionInLPerSecond());
-
     }
 
     private double calculateWaterSpeed(){
