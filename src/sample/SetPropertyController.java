@@ -25,10 +25,13 @@ public class SetPropertyController {
     private boolean isInitializeByMyController = false;
 
     @FXML
-    private TextField pipelineLength;
+    private Button previousButton;
 
     @FXML
     private Button setPropertyButton;
+
+    @FXML
+    private TextField pipelineLength;
 
     @FXML
     private TextField pipeDiameter;
@@ -43,14 +46,95 @@ public class SetPropertyController {
     private TextField inputTankHeight;
 
     @FXML
-    private Button previousButton;
-
-    @FXML
     public void initialize() {
         if (isInitializeByMyController){
             initializeProperty();
             onActionPreviousButton();
+            onChangeTextFields();
         }
+    }
+
+    private void onSetPropertyButtonAction(){
+        setPropertyButton.setOnAction(event -> {
+
+        });
+    }
+
+    private double changingValueIsNotANumber(TextField textField)throws NumberFormatException{
+        String text = textField.getText();
+        double value;
+        try {
+            value = Double.parseDouble(text);
+        }catch (NumberFormatException e){
+            throw new NumberFormatException("Value is not a number");
+        }
+        return value;
+    }
+
+    private void valueIsZero(TextField textField) throws IOException {
+        double value = Double.parseDouble(textField.getText());
+        try {
+            if (value == 0){
+                throw new IOException("This property can not be 0");
+            }
+        }catch (IOException e){
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    private void changeValueInTextField(TextField textField, double doubleValueOfTextFiled){
+        try {
+            double value = changingValueIsNotANumber(textField);
+            if (value < 0){
+                throw new IOException("This property can not be negative");
+            }
+            if(!textField.getId().equals("pipeHeight")){
+                valueIsZero(textField);
+            }
+            doubleValueOfTextFiled = value;
+        }catch (NumberFormatException | IOException e){
+            ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+            errorPopUp.showAndWait();
+            textField.setText(String.valueOf(doubleValueOfTextFiled));
+        }
+    }
+
+    private void changePipeLineLength(){
+        pipelineLength.setOnAction(event -> {
+            changeValueInTextField(pipelineLength, pipelineLengthDouble);
+        });
+    }
+
+    private void changePipeDiameter(){
+        pipeDiameter.setOnAction(event -> {
+            changeValueInTextField(pipeDiameter, pipeDiameterDouble);
+        });
+    }
+
+    private void changePipeHeight(){
+        pipeHeight.setOnAction(event -> {
+            changeValueInTextField(pipeHeight, pipeHeightDouble);
+        });
+    }
+
+    private void changeOutputTankHeight(){
+        outputTankHeight.setOnAction(event -> {
+            changeValueInTextField(outputTankHeight, outputTankHeightDouble);
+        });
+    }
+
+    private void changeInputTankHeight(){
+        inputTankHeight.setOnAction(event -> {
+            changeValueInTextField(inputTankHeight, inputTankHeightDouble);
+        });
+    }
+
+    private void onChangeTextFields(){
+        changePipeLineLength();
+        changePipeDiameter();
+        changePipeHeight();
+        changeOutputTankHeight();
+        changeInputTankHeight();
     }
 
     private void loadPreviousPage()throws IOException{
