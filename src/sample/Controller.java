@@ -7,10 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.*;
-
-
 
 public class Controller {
 
@@ -22,13 +19,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        toSecondPageButton.setOnAction(event -> {
-            try {
-                loadPropertySetPage();
-                toSecondPageButton.getScene().getWindow().hide();
-            } catch (IOException ignored) {
-            }
-        });
+        onActionToSecondPageButton();
 
     }
 
@@ -102,6 +93,16 @@ public class Controller {
             errorPopUp.showAndWait();
             throw e;
         }
+    }
+
+    private void onActionToSecondPageButton(){
+        toSecondPageButton.setOnAction(event -> {
+            try {
+                loadPropertySetPage();
+                toSecondPageButton.getScene().getWindow().hide();
+            } catch (IOException ignored) {
+            }
+        });
     }
 }
 

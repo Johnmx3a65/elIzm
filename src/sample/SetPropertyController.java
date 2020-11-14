@@ -1,7 +1,5 @@
 package sample;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -19,12 +17,6 @@ public class SetPropertyController {
     private double inputTankHeightDouble;
 
     private boolean isInitializeByMyController = false;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private TextField pipelineLength;
@@ -49,8 +41,10 @@ public class SetPropertyController {
 
     @FXML
     public void initialize() {
-        if (isInitializeByMyController)
-        initializeProperty();
+        if (isInitializeByMyController){
+            initializeProperty();
+        }
+
 
     }
 
