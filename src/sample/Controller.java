@@ -81,6 +81,7 @@ public class Controller {
             loader.load();
             SetPropertyController secondPage = loader.getController();
             setPropertyToSecondPage(secondPage);
+            secondPage.setFilePath(filePathField.getText());
             secondPage.setInitializeByMyController(true);
             secondPage.initialize();
             Parent root = loader.getRoot();

@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SetPropertyController {
@@ -23,6 +25,8 @@ public class SetPropertyController {
     private double inputTankHeightDouble;
 
     private boolean isInitializeByMyController = false;
+
+    private String filePath;
 
     @FXML
     private Button previousButton;
@@ -139,6 +143,12 @@ public class SetPropertyController {
     private void changePipeLineLength(){
         pipelineLength.setOnAction(event -> {
             pipelineLengthDouble = changeValueInTextField(pipelineLength, pipelineLengthDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
 
         });
     }
@@ -146,24 +156,48 @@ public class SetPropertyController {
     private void changePipeDiameter(){
         pipeDiameter.setOnAction(event -> {
             pipeDiameterDouble = changeValueInTextField(pipeDiameter, pipeDiameterDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
         });
     }
 
     private void changePipeHeight(){
         pipeHeight.setOnAction(event -> {
             pipeHeightDouble = changeValueInTextField(pipeHeight, pipeHeightDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
         });
     }
 
     private void changeOutputTankHeight(){
         outputTankHeight.setOnAction(event -> {
             outputTankHeightDouble = changeValueInTextField(outputTankHeight, outputTankHeightDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
         });
     }
 
     private void changeInputTankHeight(){
         inputTankHeight.setOnAction(event -> {
             inputTankHeightDouble = changeValueInTextField(inputTankHeight, inputTankHeightDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
         });
     }
 
@@ -219,6 +253,20 @@ public class SetPropertyController {
     public void setInputTankHeightDouble(double inputTankHeightDouble) {
         this.inputTankHeightDouble = inputTankHeightDouble;
         inputTankHeight.setText(String.valueOf(inputTankHeightDouble));
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    private void writeInFile() throws IOException {
+
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            String buffer = pipeDiameterDouble + ";" + pipelineLengthDouble + ";" + pipeHeightDouble + ";" + inputTankHeightDouble + ";" + outputTankHeightDouble;
+            fos.write(buffer.getBytes());
+        } catch (IOException e) {
+            throw new IOException("Error write in file");
+        }
     }
 
     private double calculateWaterSpeed(){
