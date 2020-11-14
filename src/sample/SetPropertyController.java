@@ -48,16 +48,52 @@ public class SetPropertyController {
     @FXML
     public void initialize() {
         if (isInitializeByMyController){
-            initializeProperty();
             onActionPreviousButton();
             onChangeTextFields();
+            onSetPropertyButtonAction();
         }
+    }
+
+    private void onActionPreviousButton(){
+        previousButton.setOnAction(event -> {
+            try{
+                loadPreviousPage();
+                previousButton.getScene().getWindow().hide();
+            }catch (IOException ignored){
+            }
+        });
     }
 
     private void onSetPropertyButtonAction(){
         setPropertyButton.setOnAction(event -> {
+            try {
+                loadMyPopUpDialogMenu();
+            }catch (IOException ignored){
 
+            }
         });
+    }
+
+    private void loadMyPopUpDialogMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/sample/valuesOfWaterSpeedAndConsumption.fxml"));
+        try {
+            loader.load();
+            PopUpDialogMenuController children = loader.getController();
+            children.setWaterConsumptionLabel(calculateWaterConsumptionInMPerHour());
+            children.setWaterSpeedLabel(calculateWaterSpeed());
+            children.setInitializeByMyController(true);
+            children.initialize();
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.show();
+        }catch (IOException e){
+            ErrorPopUp errorPopUp = new ErrorPopUp("ERRORS", e.getMessage());
+            errorPopUp.showAndWait();
+            throw e;
+        }
     }
 
     private double changingValueIsNotANumber(TextField textField)throws NumberFormatException{
@@ -82,7 +118,7 @@ public class SetPropertyController {
         }
     }
 
-    private void changeValueInTextField(TextField textField, double doubleValueOfTextFiled){
+    private double changeValueInTextField(TextField textField, double doubleValueOfTextFiled){
         try {
             double value = changingValueIsNotANumber(textField);
             if (value < 0){
@@ -91,41 +127,43 @@ public class SetPropertyController {
             if(!textField.getId().equals("pipeHeight")){
                 valueIsZero(textField);
             }
-            doubleValueOfTextFiled = value;
+            return value;
         }catch (NumberFormatException | IOException e){
             ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
             errorPopUp.showAndWait();
             textField.setText(String.valueOf(doubleValueOfTextFiled));
         }
+        return doubleValueOfTextFiled;
     }
 
     private void changePipeLineLength(){
         pipelineLength.setOnAction(event -> {
-            changeValueInTextField(pipelineLength, pipelineLengthDouble);
+            pipelineLengthDouble = changeValueInTextField(pipelineLength, pipelineLengthDouble);
+
         });
     }
 
     private void changePipeDiameter(){
         pipeDiameter.setOnAction(event -> {
-            changeValueInTextField(pipeDiameter, pipeDiameterDouble);
+            pipeDiameterDouble = changeValueInTextField(pipeDiameter, pipeDiameterDouble);
         });
     }
 
     private void changePipeHeight(){
         pipeHeight.setOnAction(event -> {
-            changeValueInTextField(pipeHeight, pipeHeightDouble);
+            pipeHeightDouble = changeValueInTextField(pipeHeight, pipeHeightDouble);
         });
     }
 
     private void changeOutputTankHeight(){
         outputTankHeight.setOnAction(event -> {
-            changeValueInTextField(outputTankHeight, outputTankHeightDouble);
+            outputTankHeightDouble = changeValueInTextField(outputTankHeight, outputTankHeightDouble);
         });
     }
 
     private void changeInputTankHeight(){
         inputTankHeight.setOnAction(event -> {
-            changeValueInTextField(inputTankHeight, inputTankHeightDouble);
+            inputTankHeightDouble = changeValueInTextField(inputTankHeight, inputTankHeightDouble);
         });
     }
 
@@ -152,16 +190,6 @@ public class SetPropertyController {
             errorPopUp.showAndWait();
             throw e;
         }
-    }
-
-    private void onActionPreviousButton(){
-        previousButton.setOnAction(event -> {
-            try{
-                loadPreviousPage();
-                previousButton.getScene().getWindow().hide();
-            }catch (IOException ignored){
-            }
-        });
     }
 
     public void setInitializeByMyController(boolean initializeByMyController) {
@@ -191,11 +219,6 @@ public class SetPropertyController {
     public void setInputTankHeightDouble(double inputTankHeightDouble) {
         this.inputTankHeightDouble = inputTankHeightDouble;
         inputTankHeight.setText(String.valueOf(inputTankHeightDouble));
-    }
-
-    private void initializeProperty(){
-        System.out.println("Расход воды м^3/ч: " + calculateWaterConsumptionInMPerHour());
-        System.out.println("Расход воды л/с: " + calculateWaterConsumptionInLPerSecond());
     }
 
     private double calculateWaterSpeed(){
