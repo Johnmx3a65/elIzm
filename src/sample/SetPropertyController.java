@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 public class SetPropertyController {
 
@@ -23,6 +25,10 @@ public class SetPropertyController {
     private double outputTankHeightDouble;
 
     private double inputTankHeightDouble;
+
+    private double outputTankCapacityDouble;
+
+    private double inputTankCapacityDouble;
 
     private boolean isInitializeByMyController = false;
 
@@ -48,6 +54,12 @@ public class SetPropertyController {
 
     @FXML
     private TextField inputTankHeight;
+
+    @FXML
+    private TextField outputTankCapacity;
+
+    @FXML
+    private TextField inputTankCapacity;
 
     @FXML
     public void initialize() {
@@ -140,6 +152,32 @@ public class SetPropertyController {
         return doubleValueOfTextFiled;
     }
 
+    private void changeInputTankCapacity(){
+        inputTankCapacity.setOnAction(event -> {
+            inputTankCapacityDouble = changeValueInTextField(inputTankCapacity, inputTankCapacityDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
+
+        });
+    }
+
+    private void changeOutputTankCapacity(){
+        outputTankCapacity.setOnAction(event -> {
+            outputTankCapacityDouble = changeValueInTextField(outputTankCapacity, outputTankCapacityDouble);
+            try{
+                writeInFile();
+            }catch (IOException e){
+                ErrorPopUp errorPopUp = new ErrorPopUp("ERROR", e.getMessage());
+                errorPopUp.showAndWait();
+            }
+
+        });
+    }
+
     private void changePipeLineLength(){
         pipelineLength.setOnAction(event -> {
             pipelineLengthDouble = changeValueInTextField(pipelineLength, pipelineLengthDouble);
@@ -207,6 +245,8 @@ public class SetPropertyController {
         changePipeHeight();
         changeOutputTankHeight();
         changeInputTankHeight();
+        changeInputTankCapacity();
+        changeOutputTankCapacity();
     }
 
     private void loadPreviousPage()throws IOException{
@@ -228,6 +268,16 @@ public class SetPropertyController {
 
     public void setInitializeByMyController(boolean initializeByMyController) {
         isInitializeByMyController = initializeByMyController;
+    }
+
+    public void setInputTankCapacityDouble(double inputTankCapacityDouble) {
+        this.inputTankCapacityDouble = inputTankCapacityDouble;
+        inputTankCapacity.setText(String.valueOf(inputTankCapacityDouble));
+    }
+
+    public void setOutputTankCapacityDouble(double outputTankCapacityDouble) {
+        this.outputTankCapacityDouble = outputTankCapacityDouble;
+        outputTankCapacity.setText(String.valueOf(outputTankCapacityDouble));
     }
 
     public void setPipelineLengthDouble(double pipelineLengthDouble) {
@@ -262,7 +312,15 @@ public class SetPropertyController {
     private void writeInFile() throws IOException {
 
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            String buffer = pipeDiameterDouble + ";" + pipelineLengthDouble + ";" + pipeHeightDouble + ";" + inputTankHeightDouble + ";" + outputTankHeightDouble;
+            DecimalFormat format = new DecimalFormat("#.00");
+            String pipeDiameterString = format.format(pipeDiameterDouble).replace(".",",");
+            String pipeLineLegthString = format.format(pipelineLengthDouble).replace(".",",");
+            String pipeHeightString = format.format(pipeHeightDouble).replace(".",",");
+            String inputTankHeightString = format.format(inputTankHeightDouble).replace(".",",");
+            String outputTankHeightString = format.format(outputTankHeightDouble).replace(".",",");
+            String inputTankCapacityString = format.format(inputTankCapacityDouble).replace(".",",");
+            String outputTankCapacityString = format.format(outputTankCapacityDouble).replace(".",",");
+            String buffer = pipeDiameterString + ";" + pipeLineLegthString + ";" + pipeHeightString + ";" + inputTankHeightString + ";" + outputTankHeightString + ";" + inputTankCapacityString + ";" + outputTankCapacityString;
             fos.write(buffer.getBytes());
         } catch (IOException e) {
             throw new IOException("Error write in file");
@@ -289,12 +347,5 @@ public class SetPropertyController {
         double CIRCLE_AREA = SENSOR_PIPE_DIAMETER * SENSOR_PIPE_DIAMETER * Math.PI;
         return WATER_SPEED_PER_HOUR * CIRCLE_AREA;
     }
-
-    private double calculateWaterConsumptionInLPerSecond(){
-        return calculateWaterConsumptionInMPerHour() * 1000 / 3600;
-    }
-
-
-
 }
 

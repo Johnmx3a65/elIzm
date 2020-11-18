@@ -8,6 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class Controller {
 
@@ -49,20 +52,23 @@ public class Controller {
 
     }
 
-    private double[] getPropertyFromFile() throws IOException {
+    private double[] getPropertyFromFile() throws IOException, ParseException {
         String fileText = readFromFile();
         String[] stringProperties = fileText.split(";");
         double[] doubleProperties = new double[stringProperties.length];
+        NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+        Number number;
         for(int i = 0; i < stringProperties.length; i++){
-            doubleProperties[i] = Double.parseDouble(stringProperties[i]);
+            number = format.parse(stringProperties[i]);
+            doubleProperties[i] = number.doubleValue();
         }
         return doubleProperties;
     }
 
-    private void setPropertyToSecondPage(SetPropertyController secondPage) throws IOException {
+    private void setPropertyToSecondPage(SetPropertyController secondPage) throws IOException, ParseException {
         double[] properties = getPropertyFromFile();
 
-        if (properties.length != 5) {
+        if (properties.length != 7) {
             throw new IOException("Incorrect count of properties");
         } else {
             secondPage.setPipeDiameterDouble(properties[0]);
@@ -70,11 +76,12 @@ public class Controller {
             secondPage.setPipeHeightDouble(properties[2]);
             secondPage.setInputTankHeightDouble(properties[3]);
             secondPage.setOutputTankHeightDouble(properties[4]);
+            secondPage.setInputTankCapacityDouble(properties[5]);
+            secondPage.setOutputTankCapacityDouble(properties[6]);
         }
-
     }
 
-    private void loadPropertySetPage() throws IOException {
+    private void loadPropertySetPage() throws IOException, ParseException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/sample/setPropertyFile.fxml"));
         try {
@@ -89,7 +96,7 @@ public class Controller {
             stage.setResizable(false);
             stage.setScene(new Scene(root));
             stage.show();
-        }catch (IOException e){
+        }catch (IOException | ParseException e){
             ErrorPopUp errorPopUp = new ErrorPopUp("ERRORS", e.getMessage());
             errorPopUp.showAndWait();
             throw e;
@@ -101,7 +108,7 @@ public class Controller {
             try {
                 loadPropertySetPage();
                 toSecondPageButton.getScene().getWindow().hide();
-            } catch (IOException ignored) {
+            } catch (IOException | ParseException ignored) {
             }
         });
     }

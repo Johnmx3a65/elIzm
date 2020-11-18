@@ -11,9 +11,11 @@
         <TextField fx:id="pipelineLength" layoutX="107.0" layoutY="65.0" prefHeight="25.0" prefWidth="101.0" promptText="pipeline length" />
         <Button fx:id="setPropertyButton" layoutX="259.0" layoutY="220.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="set property" />
       <TextField fx:id="pipeDiameter" layoutX="107.0" layoutY="110.0" prefHeight="25.0" prefWidth="101.0" promptText="pipe diameter" />
-      <TextField fx:id="pipeHeight" layoutX="250.0" layoutY="154.0" prefHeight="25.0" prefWidth="101.0" promptText="pipe height" />
-      <TextField fx:id="outputTankHeight" layoutX="375.0" layoutY="66.0" prefHeight="25.0" prefWidth="119.0" promptText="output tank height" />
-      <TextField fx:id="inputTankHeight" layoutX="375.0" layoutY="111.0" prefHeight="25.0" prefWidth="119.0" promptText="input tank height" />
+      <TextField fx:id="pipeHeight" layoutX="107.0" layoutY="154.0" prefHeight="25.0" prefWidth="101.0" promptText="pipe height" />
+      <TextField fx:id="outputTankHeight" layoutX="249.0" layoutY="65.0" prefHeight="25.0" prefWidth="119.0" promptText="output tank height" />
+      <TextField fx:id="inputTankHeight" layoutX="406.0" layoutY="65.0" prefHeight="25.0" prefWidth="119.0" promptText="input tank height" />
+      <TextField fx:id="outputTankCapacity" layoutX="249.0" layoutY="110.0" prefHeight="25.0" prefWidth="129.0" promptText="output tank capacity" />
+      <TextField fx:id="inputTankCapacity" layoutX="406.0" layoutY="110.0" prefHeight="25.0" prefWidth="119.0" promptText="input tank capacity" />
     </AnchorPane>
     <Label layoutX="236.0" layoutY="29.0" prefHeight="40.0" prefWidth="129.0" text="Configuration" textFill="WHITE">
         <font>
